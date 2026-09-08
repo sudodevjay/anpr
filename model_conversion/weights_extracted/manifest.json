@@ -1,0 +1,1577 @@
+{
+ "backbone.conv1._conv.weight": {
+  "shape": [
+   16,
+   3,
+   3,
+   3
+  ],
+  "dtype": "float32"
+ },
+ "backbone.conv1._batch_norm.weight": {
+  "shape": [
+   16
+  ],
+  "dtype": "float32"
+ },
+ "backbone.conv1._batch_norm.bias": {
+  "shape": [
+   16
+  ],
+  "dtype": "float32"
+ },
+ "backbone.conv1._batch_norm._mean": {
+  "shape": [
+   16
+  ],
+  "dtype": "float32"
+ },
+ "backbone.conv1._batch_norm._variance": {
+  "shape": [
+   16
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.0._depthwise_conv._conv.weight": {
+  "shape": [
+   16,
+   1,
+   3,
+   3
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.0._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   16
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.0._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   16
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.0._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   16
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.0._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   16
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.0._pointwise_conv._conv.weight": {
+  "shape": [
+   32,
+   16,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.0._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   32
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.0._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   32
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.0._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   32
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.0._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   32
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.1._depthwise_conv._conv.weight": {
+  "shape": [
+   32,
+   1,
+   3,
+   3
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.1._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   32
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.1._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   32
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.1._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   32
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.1._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   32
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.1._pointwise_conv._conv.weight": {
+  "shape": [
+   64,
+   32,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.1._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.1._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.1._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.1._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.2._depthwise_conv._conv.weight": {
+  "shape": [
+   64,
+   1,
+   3,
+   3
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.2._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.2._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.2._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.2._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.2._pointwise_conv._conv.weight": {
+  "shape": [
+   64,
+   64,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.2._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.2._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.2._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.2._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.3._depthwise_conv._conv.weight": {
+  "shape": [
+   64,
+   1,
+   3,
+   3
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.3._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.3._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.3._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.3._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.3._pointwise_conv._conv.weight": {
+  "shape": [
+   128,
+   64,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.3._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.3._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.3._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.3._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.4._depthwise_conv._conv.weight": {
+  "shape": [
+   128,
+   1,
+   3,
+   3
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.4._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.4._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.4._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.4._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.4._pointwise_conv._conv.weight": {
+  "shape": [
+   128,
+   128,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.4._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.4._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.4._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.4._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.5._depthwise_conv._conv.weight": {
+  "shape": [
+   128,
+   1,
+   3,
+   3
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.5._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.5._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.5._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.5._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.5._pointwise_conv._conv.weight": {
+  "shape": [
+   256,
+   128,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.5._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.5._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.5._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.5._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.6._depthwise_conv._conv.weight": {
+  "shape": [
+   256,
+   1,
+   5,
+   5
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.6._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.6._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.6._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.6._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.6._pointwise_conv._conv.weight": {
+  "shape": [
+   256,
+   256,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.6._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.6._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.6._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.6._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.7._depthwise_conv._conv.weight": {
+  "shape": [
+   256,
+   1,
+   5,
+   5
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.7._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.7._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.7._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.7._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.7._pointwise_conv._conv.weight": {
+  "shape": [
+   256,
+   256,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.7._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.7._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.7._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.7._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.8._depthwise_conv._conv.weight": {
+  "shape": [
+   256,
+   1,
+   5,
+   5
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.8._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.8._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.8._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.8._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.8._pointwise_conv._conv.weight": {
+  "shape": [
+   256,
+   256,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.8._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.8._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.8._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.8._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.9._depthwise_conv._conv.weight": {
+  "shape": [
+   256,
+   1,
+   5,
+   5
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.9._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.9._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.9._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.9._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.9._pointwise_conv._conv.weight": {
+  "shape": [
+   256,
+   256,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.9._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.9._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.9._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.9._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.10._depthwise_conv._conv.weight": {
+  "shape": [
+   256,
+   1,
+   5,
+   5
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.10._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.10._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.10._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.10._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.10._pointwise_conv._conv.weight": {
+  "shape": [
+   256,
+   256,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.10._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.10._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.10._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.10._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._depthwise_conv._conv.weight": {
+  "shape": [
+   256,
+   1,
+   5,
+   5
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._se.conv1.weight": {
+  "shape": [
+   64,
+   256,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._se.conv1.bias": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._se.conv2.weight": {
+  "shape": [
+   256,
+   64,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._se.conv2.bias": {
+  "shape": [
+   256
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._pointwise_conv._conv.weight": {
+  "shape": [
+   512,
+   256,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.11._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._depthwise_conv._conv.weight": {
+  "shape": [
+   512,
+   1,
+   5,
+   5
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._depthwise_conv._batch_norm.weight": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._depthwise_conv._batch_norm.bias": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._depthwise_conv._batch_norm._mean": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._depthwise_conv._batch_norm._variance": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._se.conv1.weight": {
+  "shape": [
+   128,
+   512,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._se.conv1.bias": {
+  "shape": [
+   128
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._se.conv2.weight": {
+  "shape": [
+   512,
+   128,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._se.conv2.bias": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._pointwise_conv._conv.weight": {
+  "shape": [
+   512,
+   512,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._pointwise_conv._batch_norm.weight": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._pointwise_conv._batch_norm.bias": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._pointwise_conv._batch_norm._mean": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "backbone.block_list.12._pointwise_conv._batch_norm._variance": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv1.conv.weight": {
+  "shape": [
+   64,
+   512,
+   3,
+   3
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv1.norm.weight": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv1.norm.bias": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv1.norm._mean": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv1.norm._variance": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv2.conv.weight": {
+  "shape": [
+   120,
+   64,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv2.norm.weight": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv2.norm.bias": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv2.norm._mean": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv2.norm._variance": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.0.norm1.weight": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.0.norm1.bias": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.0.mixer.qkv.weight": {
+  "shape": [
+   120,
+   360
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.0.mixer.qkv.bias": {
+  "shape": [
+   360
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.0.mixer.proj.weight": {
+  "shape": [
+   120,
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.0.mixer.proj.bias": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.0.norm2.weight": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.0.norm2.bias": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.0.mlp.fc1.weight": {
+  "shape": [
+   120,
+   240
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.0.mlp.fc1.bias": {
+  "shape": [
+   240
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.0.mlp.fc2.weight": {
+  "shape": [
+   240,
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.0.mlp.fc2.bias": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.1.norm1.weight": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.1.norm1.bias": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.1.mixer.qkv.weight": {
+  "shape": [
+   120,
+   360
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.1.mixer.qkv.bias": {
+  "shape": [
+   360
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.1.mixer.proj.weight": {
+  "shape": [
+   120,
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.1.mixer.proj.bias": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.1.norm2.weight": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.1.norm2.bias": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.1.mlp.fc1.weight": {
+  "shape": [
+   120,
+   240
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.1.mlp.fc1.bias": {
+  "shape": [
+   240
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.1.mlp.fc2.weight": {
+  "shape": [
+   240,
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.svtr_block.1.mlp.fc2.bias": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.norm.weight": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.norm.bias": {
+  "shape": [
+   120
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv3.conv.weight": {
+  "shape": [
+   512,
+   120,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv3.norm.weight": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv3.norm.bias": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv3.norm._mean": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv3.norm._variance": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv4.conv.weight": {
+  "shape": [
+   64,
+   1024,
+   3,
+   3
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv4.norm.weight": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv4.norm.bias": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv4.norm._mean": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv4.norm._variance": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv1x1.conv.weight": {
+  "shape": [
+   64,
+   64,
+   1,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv1x1.norm.weight": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv1x1.norm.bias": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv1x1.norm._mean": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_encoder.encoder.conv1x1.norm._variance": {
+  "shape": [
+   64
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_head.fc.weight": {
+  "shape": [
+   64,
+   97
+  ],
+  "dtype": "float32"
+ },
+ "head.ctc_head.fc.bias": {
+  "shape": [
+   97
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.weight_ih_l0": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.weight_hh_l0": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.bias_ih_l0": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.bias_hh_l0": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.weight_ih_l1": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.weight_hh_l1": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.bias_ih_l1": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.bias_hh_l1": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.0.cell.weight_ih": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.0.cell.weight_hh": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.0.cell.bias_ih": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.0.cell.bias_hh": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.1.cell.weight_ih": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.1.cell.weight_hh": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.1.cell.bias_ih": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.rnn_encoder.1.cell.bias_hh": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.linear.weight": {
+  "shape": [
+   512,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.encoder.linear.bias": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.conv1x1_1.weight": {
+  "shape": [
+   512,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.conv1x1_1.bias": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.conv3x3_1.weight": {
+  "shape": [
+   512,
+   512,
+   3,
+   3
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.conv3x3_1.bias": {
+  "shape": [
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.conv1x1_2.weight": {
+  "shape": [
+   512,
+   1
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.conv1x1_2.bias": {
+  "shape": [
+   1
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.weight_ih_l0": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.weight_hh_l0": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.bias_ih_l0": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.bias_hh_l0": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.weight_ih_l1": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.weight_hh_l1": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.bias_ih_l1": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.bias_hh_l1": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.0.cell.weight_ih": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.0.cell.weight_hh": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.0.cell.bias_ih": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.0.cell.bias_hh": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.1.cell.weight_ih": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.1.cell.weight_hh": {
+  "shape": [
+   2048,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.1.cell.bias_ih": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.rnn_decoder.1.cell.bias_hh": {
+  "shape": [
+   2048
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.embedding.weight": {
+  "shape": [
+   99,
+   512
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.prediction.weight": {
+  "shape": [
+   1536,
+   98
+  ],
+  "dtype": "float32"
+ },
+ "head.sar_head.decoder.prediction.bias": {
+  "shape": [
+   98
+  ],
+  "dtype": "float32"
+ }
+}

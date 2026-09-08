@@ -1,0 +1,69 @@
+@* Shared top nav across all 4 pages (Live Dashboard / Scan History /
+   Vehicle Registry / Analytics Dashboard) -- rendered once by MainLayout so
+   every page gets the same header with the current route highlighted via
+   NavLink's built-in active-route matching. Admin/Logout/Database badges on
+   the right are cosmetic (no auth or real database exists in this project
+   yet) -- kept purely to match the reference layout's visual completeness. *@
+
+<header class="flex items-center gap-6 h-16 px-4 flex-none bg-[#ececec] border-b border-[#ccc] font-sans">
+    <div class="flex items-center gap-2.5 flex-none">
+        <div class="w-9 h-9 rounded-lg bg-[#1a5fb4] flex items-center justify-center flex-none">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round">
+                <path d="M12 3l7 2.5v5c0 4.5-3 8-7 9.5-4-1.5-7-5-7-9.5v-5z" />
+                <path d="M9 12l2 2 4-4.5" stroke-linecap="round" />
+            </svg>
+        </div>
+        <div class="leading-[1.05]">
+            <div class="font-extrabold text-[0.95rem] text-[#111] tracking-wide">ANPR</div>
+            <div class="font-extrabold text-[0.95rem] text-[#111] tracking-wide">SYSTEM</div>
+        </div>
+    </div>
+
+    <nav class="flex items-center gap-1">
+        <NavLink href="/" Match="NavLinkMatch.All"
+                 class="px-3 py-1.5 rounded text-sm font-medium text-[#555] hover:text-[#222] hover:bg-[#e2e2e2] border border-transparent"
+                 ActiveClass="!text-[#1a5fb4] !bg-[#eaf1fb] !border-[#1a5fb4] font-semibold">
+            Live Dashboard
+        </NavLink>
+        <NavLink href="/scan-history"
+                 class="px-3 py-1.5 rounded text-sm font-medium text-[#555] hover:text-[#222] hover:bg-[#e2e2e2] border border-transparent"
+                 ActiveClass="!text-[#1a5fb4] !bg-[#eaf1fb] !border-[#1a5fb4] font-semibold">
+            Scan History
+        </NavLink>
+        <NavLink href="/vehicle-registry"
+                 class="px-3 py-1.5 rounded text-sm font-medium text-[#555] hover:text-[#222] hover:bg-[#e2e2e2] border border-transparent"
+                 ActiveClass="!text-[#1a5fb4] !bg-[#eaf1fb] !border-[#1a5fb4] font-semibold">
+            Vehicle Registry
+        </NavLink>
+        <NavLink href="/analytics"
+                 class="px-3 py-1.5 rounded text-sm font-medium text-[#555] hover:text-[#222] hover:bg-[#e2e2e2] border border-transparent"
+                 ActiveClass="!text-[#1a5fb4] !bg-[#eaf1fb] !border-[#1a5fb4] font-semibold">
+            Analytics Dashboard
+        </NavLink>
+        <NavLink href="/setup"
+                 class="px-3 py-1.5 rounded text-sm font-medium text-[#555] hover:text-[#222] hover:bg-[#e2e2e2] border border-transparent"
+                 ActiveClass="!text-[#1a5fb4] !bg-[#eaf1fb] !border-[#1a5fb4] font-semibold">
+            Lane Setup
+        </NavLink>
+        <NavLink href="/license"
+                 class="px-3 py-1.5 rounded text-sm font-medium text-[#555] hover:text-[#222] hover:bg-[#e2e2e2] border border-transparent"
+                 ActiveClass="!text-[#1a5fb4] !bg-[#eaf1fb] !border-[#1a5fb4] font-semibold">
+            License
+        </NavLink>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-2 flex-none">
+        <span class="flex items-center gap-1.5 bg-white border border-[#ccc] rounded px-3 py-1.5 text-xs text-[#555]">
+            <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="5.2" r="2.7" /><path d="M2.5 14c0-3 2.5-5 5.5-5s5.5 2 5.5 5" /></svg>
+            Admin: <span class="font-bold text-[#222]">admin</span>
+        </span>
+        <a href="javascript:void(0)" title="No real auth is wired up yet -- cosmetic only"
+           class="bg-white border border-[#c23b1f] text-[#c23b1f] hover:bg-[#c23b1f] hover:text-white rounded px-3 py-1.5 text-xs font-semibold cursor-pointer">
+            Logout
+        </a>
+        <span class="flex items-center gap-1.5 bg-white border border-[#ccc] rounded px-3 py-1.5 text-xs text-[#555]">
+            <span class="w-2 h-2 rounded-full bg-[#3fa142]"></span>
+            Database: <span class="font-bold text-[#222]">CONNECTED</span>
+        </span>
+    </div>
+</header>

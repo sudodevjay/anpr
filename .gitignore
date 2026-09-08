@@ -1,0 +1,33 @@
+# Build output
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+*.user
+
+# Node
+node_modules/
+
+# Python virtual environment used for model conversion/training scripts --
+# huge, machine-specific, and trivially reproducible from the scripts
+# themselves. Never commit a venv.
+model_conversion/convenv/
+model_conversion/**/__pycache__/
+model_conversion/**/*.pyc
+
+# IDE
+.vs/
+.vscode/
+
+# Vendor-only license signing key -- NEVER commit this. Losing control of
+# it would let anyone forge license keys for every installed copy.
+src/LicenseGenerator/vendor_private.key
+
+# Site-specific runtime config (camera/controller IPs, credentials, issued
+# license, generated device id) -- generated per install via the app's own
+# admin UI, not source code. Never commit real camera/controller
+# credentials to source control.
+src/UvssService/data/*.json
+src/UvssService/data/*.lic
+src/UvssService/data/*.txt
+!src/UvssService/data/.gitkeep

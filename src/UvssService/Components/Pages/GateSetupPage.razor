@@ -1,0 +1,782 @@
+@page "/setup"
+@rendermode InteractiveServer
+@using UvssService.Config
+@using UvssService.Sensors
+@inject GateConfigStore GateConfigStore
+@inject CameraConfigStore CameraConfigStore
+@inject ControllerConfigStore ControllerConfigStore
+@inject DisplayConfigStore DisplayConfigStore
+@inject UvssService.Lanes.GateStateStore GateStateStore
+@inject BarrierControllerRegistry BarrierControllerRegistry
+@inject VehicleDisplayBus VehicleDisplayBus
+@inject DisplayBusSettingsStore DisplayBusSettingsStore
+@implements IDisposable
+
+<PageTitle>Lane Setup - ANPR</PageTitle>
+
+<div class="p-4 max-w-[1200px] mx-auto flex flex-col gap-4">
+    <div class="flex items-center justify-between flex-wrap gap-2">
+        <h1 class="text-base font-bold tracking-wide text-[#222]">LANE SETUP</h1>
+        <div class="flex items-center gap-2">
+            <button class="flex items-center gap-1.5 bg-[#1a5fb4] text-white px-3.5 py-2 rounded text-sm font-semibold cursor-pointer hover:bg-[#164e93]"
+                    @onclick="OpenAddGate">
+                <span class="text-base leading-none">+</span> Add Lane
+            </button>
+            <button class="flex items-center gap-1.5 bg-[#1a5fb4] text-white px-3.5 py-2 rounded text-sm font-semibold cursor-pointer hover:bg-[#164e93]"
+                    @onclick="OpenAddCamera">
+                <span class="text-base leading-none">+</span> Add Camera
+            </button>
+            <button class="flex items-center gap-1.5 bg-[#1a5fb4] text-white px-3.5 py-2 rounded text-sm font-semibold cursor-pointer hover:bg-[#164e93]"
+                    @onclick="OpenAddController">
+                <span class="text-base leading-none">+</span> Add Controller
+            </button>
+            <button class="flex items-center gap-1.5 bg-[#1a5fb4] text-white px-3.5 py-2 rounded text-sm font-semibold cursor-pointer hover:bg-[#164e93]"
+                    @onclick="OpenAddDisplay">
+                <span class="text-base leading-none">+</span> Add Display
+            </button>
+        </div>
+    </div>
+
+    <!-- Lanes -- the foundation everything else (camera/controller/display)
+         is assigned to. Create exactly the lanes this site physically has
+         (however many entry/exit lanes), then assign hardware to each. -->
+    <div class="bg-white border border-[#ccc] rounded overflow-hidden">
+        <div class="px-4 py-3 border-b border-[#ccc] bg-[#ececec]">
+            <h2 class="text-xs font-bold tracking-wide text-[#222]">LANES</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-[#f5f5f5] border-b border-[#ccc]">
+                    <tr class="text-left text-[#555] text-xs uppercase tracking-wide">
+                        <th class="p-3">Name</th>
+                        <th class="p-3">Type</th>
+                        <th class="p-3">Enabled</th>
+                        <th class="p-3">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var gate in _gates)
+                    {
+                        <tr class="border-b border-[#eee] hover:bg-[#fafafa]">
+                            <td class="p-3 font-bold text-[#1a5fb4]">@gate.DisplayName</td>
+                            <td class="p-3 text-[#555]">@gate.Kind</td>
+                            <td class="p-3">
+                                <span class="px-2 py-0.5 rounded text-xs font-bold @(gate.Enabled ? "bg-[#dff2df] text-[#2c7a2c]" : "bg-[#eee] text-[#777]")">
+                                    @(gate.Enabled ? "Yes" : "No")
+                                </span>
+                            </td>
+                            <td class="p-3">
+                                <div class="flex items-center gap-2">
+                                    <button class="text-[#1a5fb4] text-xs font-semibold cursor-pointer underline" @onclick="() => OpenEditGate(gate)">Edit</button>
+                                    <button class="text-[#c23b1f] text-xs font-semibold cursor-pointer underline" @onclick="() => RemoveGate(gate)">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (_gates.Count == 0)
+                    {
+                        <tr><td colspan="4" class="p-6 text-center text-[#777]">No lanes created yet -- click "Add Lane" above to create your first entry/exit lane.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Cameras -->
+    <div class="bg-white border border-[#ccc] rounded overflow-hidden">
+        <div class="px-4 py-3 border-b border-[#ccc] bg-[#ececec]">
+            <h2 class="text-xs font-bold tracking-wide text-[#222]">CAMERAS</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-[#f5f5f5] border-b border-[#ccc]">
+                    <tr class="text-left text-[#555] text-xs uppercase tracking-wide">
+                        <th class="p-3">Lane</th>
+                        <th class="p-3">Name</th>
+                        <th class="p-3">IP Address</th>
+                        <th class="p-3">Enabled</th>
+                        <th class="p-3">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var camera in CameraConfigStore.All)
+                    {
+                        <tr class="border-b border-[#eee] hover:bg-[#fafafa]">
+                            <td class="p-3 font-bold text-[#1a5fb4]">@GateDisplayName(camera.GateName)</td>
+                            <td class="p-3">@camera.Name</td>
+                            <td class="p-3 text-[#555]">@camera.Ip</td>
+                            <td class="p-3">
+                                <span class="px-2 py-0.5 rounded text-xs font-bold @(camera.Enabled ? "bg-[#dff2df] text-[#2c7a2c]" : "bg-[#eee] text-[#777]")">
+                                    @(camera.Enabled ? "Yes" : "No")
+                                </span>
+                            </td>
+                            <td class="p-3">
+                                <div class="flex items-center gap-2">
+                                    <button class="text-[#1a5fb4] text-xs font-semibold cursor-pointer underline" @onclick="() => OpenEditCamera(camera)">Edit</button>
+                                    <button class="text-[#c23b1f] text-xs font-semibold cursor-pointer underline" @onclick="() => CameraConfigStore.Remove(camera.Id)">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (CameraConfigStore.All.Count == 0)
+                    {
+                        <tr><td colspan="5" class="p-6 text-center text-[#777]">No cameras configured yet -- click "Add Camera" above.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Barrier Controllers -->
+    <div class="bg-white border border-[#ccc] rounded overflow-hidden">
+        <div class="px-4 py-3 border-b border-[#ccc] bg-[#ececec]">
+            <h2 class="text-xs font-bold tracking-wide text-[#222]">BARRIER CONTROLLERS</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-[#f5f5f5] border-b border-[#ccc]">
+                    <tr class="text-left text-[#555] text-xs uppercase tracking-wide">
+                        <th class="p-3">Lane</th>
+                        <th class="p-3">IP Address</th>
+                        <th class="p-3">Status</th>
+                        <th class="p-3">Test</th>
+                        <th class="p-3">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var controller in ControllerConfigStore.All)
+                    {
+                        var state = GateStateStore.Find(controller.GateName);
+                        var online = state?.ControllerOnline == true;
+                        <tr class="border-b border-[#eee] hover:bg-[#fafafa]">
+                            <td class="p-3 font-bold text-[#1a5fb4]">@GateDisplayName(controller.GateName)</td>
+                            <td class="p-3 text-[#555]">@controller.TcpBindAddress</td>
+                            <td class="p-3">
+                                <span class="flex items-center gap-1.5 font-bold @(online ? "text-[#2c7a2c]" : "text-[#c23b1f]")">
+                                    <span class="w-2.5 h-2.5 rounded-full inline-block @(online ? "bg-[#39d353]" : "bg-[#c23b1f]")"></span>
+                                    @(online ? "ONLINE" : "OFFLINE")
+                                </span>
+                                @if (state?.BarrierOpen == true)
+                                {
+                                    <div class="text-[0.65rem] text-[#2c7a2c] font-bold mt-0.5">BARRIER OPEN</div>
+                                }
+                            </td>
+                            <td class="p-3">
+                                <button class="bg-[#2c7a2c] text-white px-2.5 py-1 rounded text-xs font-semibold cursor-pointer" @onclick="() => TestOpenBarrier(controller.GateName)">Open</button>
+                            </td>
+                            <td class="p-3">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <button class="text-[#1a5fb4] text-xs font-semibold cursor-pointer underline" @onclick="() => OpenEditController(controller)">Edit</button>
+                                    <button class="text-[#c23b1f] text-xs font-semibold cursor-pointer underline" @onclick="() => ControllerConfigStore.Remove(controller.Id)">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (ControllerConfigStore.All.Count == 0)
+                    {
+                        <tr><td colspan="5" class="p-6 text-center text-[#777]">No barrier controllers configured yet -- click "Add Controller" above.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Vehicle Number Displays -->
+    <div class="bg-white border border-[#ccc] rounded overflow-hidden">
+        <div class="px-4 py-3 border-b border-[#ccc] bg-[#ececec]">
+            <h2 class="text-xs font-bold tracking-wide text-[#222]">VEHICLE NUMBER DISPLAYS</h2>
+        </div>
+
+        <!-- Every display board on site shares ONE USB-RS485 bus, so there's
+             exactly one real COM port for the whole site -- set once here,
+             not per display (the Add/Edit Display modal shows it read-only). -->
+        <div class="px-4 py-3 border-b border-[#ccc] bg-[#fafafa] flex items-center gap-2 flex-wrap">
+            <label class="text-xs font-semibold text-[#555]">Display Bus COM Port:</label>
+            <select @bind="_displayBusComPort" class="border border-[#ccc] rounded px-2 py-1.5 text-sm">
+                <option value="">-- select --</option>
+                @foreach (var port in AvailableComPorts)
+                {
+                    <option value="@port">@port</option>
+                }
+                @if (!string.IsNullOrEmpty(DisplayBusSettingsStore.ComPort) && !AvailableComPorts.Contains(DisplayBusSettingsStore.ComPort))
+                {
+                    <option value="@DisplayBusSettingsStore.ComPort">@DisplayBusSettingsStore.ComPort (not detected right now)</option>
+                }
+            </select>
+            <button class="bg-[#1a5fb4] text-white px-3 py-1.5 rounded text-xs font-semibold cursor-pointer" @onclick="SaveDisplayBusComPort">Save</button>
+            <span class="text-[0.68rem] text-[#777]">Currently saved: @(string.IsNullOrEmpty(DisplayBusSettingsStore.ComPort) ? "(none)" : DisplayBusSettingsStore.ComPort)</span>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-[#f5f5f5] border-b border-[#ccc]">
+                    <tr class="text-left text-[#555] text-xs uppercase tracking-wide">
+                        <th class="p-3">Lane</th>
+                        <th class="p-3">Display ID</th>
+                        <th class="p-3">Enabled</th>
+                        <th class="p-3">Status</th>
+                        <th class="p-3">Test</th>
+                        <th class="p-3">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var display in DisplayConfigStore.All)
+                    {
+                        var displayState = GateStateStore.Find(display.GateName);
+                        var displayOnline = displayState?.DisplayOnline == true;
+                        <tr class="border-b border-[#eee] hover:bg-[#fafafa]">
+                            <td class="p-3 font-bold text-[#1a5fb4]">@GateDisplayName(display.GateName)</td>
+                            <td class="p-3 text-[#555]">@display.DisplayId</td>
+                            <td class="p-3">
+                                <span class="px-2 py-0.5 rounded text-xs font-bold @(display.Enabled ? "bg-[#dff2df] text-[#2c7a2c]" : "bg-[#eee] text-[#777]")">
+                                    @(display.Enabled ? "Yes" : "No")
+                                </span>
+                            </td>
+                            <td class="p-3">
+                                <span class="flex items-center gap-1.5 font-bold @(displayOnline ? "text-[#2c7a2c]" : "text-[#c23b1f]")">
+                                    <span class="w-2.5 h-2.5 rounded-full inline-block @(displayOnline ? "bg-[#39d353]" : "bg-[#c23b1f]")"></span>
+                                    @(displayOnline ? "ONLINE" : "OFFLINE")
+                                </span>
+                            </td>
+                            <td class="p-3">
+                                <button class="bg-[#2c7a2c] text-white px-2.5 py-1 rounded text-xs font-semibold cursor-pointer" @onclick="() => TestDisplay(display)">Test</button>
+                            </td>
+                            <td class="p-3">
+                                <div class="flex items-center gap-2">
+                                    <button class="text-[#1a5fb4] text-xs font-semibold cursor-pointer underline" @onclick="() => OpenEditDisplay(display)">Edit</button>
+                                    <button class="text-[#c23b1f] text-xs font-semibold cursor-pointer underline" @onclick="() => DisplayConfigStore.Remove(display.Id)">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (DisplayConfigStore.All.Count == 0)
+                    {
+                        <tr><td colspan="6" class="p-6 text-center text-[#777]">No vehicle-number displays configured yet -- click "Add Display" above.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p class="text-[0.68rem] text-[#777]">Restart the service for lane/camera/controller/display changes to take effect.</p>
+</div>
+
+@if (_showGateModal)
+{
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" @onclick="CloseGateModal">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md" @onclick:stopPropagation="true">
+            <div class="flex items-center justify-between px-5 py-3.5 border-b border-[#eee]">
+                <h3 class="font-bold text-sm text-[#222]">@(_editingGateId == null ? "Add Lane" : "Edit Lane")</h3>
+                <button class="text-[#777] hover:text-[#222] text-lg leading-none cursor-pointer" @onclick="CloseGateModal">&#10005;</button>
+            </div>
+            <div class="p-5 flex flex-col gap-3">
+                @if (_editingGateId != null)
+                {
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold text-[#555]">Internal ID</label>
+                        <input value="@_editingGateInternalName" readonly class="border border-[#ccc] rounded px-2 py-1.5 text-sm bg-[#f5f5f5] text-[#777] cursor-not-allowed" />
+                    </div>
+                }
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-[#555]">Lane Name <span class="text-[#c23b1f]">*</span></label>
+                    <input @bind="_gateDisplayName" placeholder="e.g. Main Entry, Exit Lane 1" class="border border-[#ccc] rounded px-2 py-1.5 text-sm" />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-[#555]">Type <span class="text-[#c23b1f]">*</span></label>
+                    <select @bind="_gateKind" class="border border-[#ccc] rounded px-2 py-1.5 text-sm">
+                        <option value="@GateKind.Entry">Entry</option>
+                        <option value="@GateKind.Exit">Exit</option>
+                    </select>
+                </div>
+                <label class="flex items-center gap-2 text-xs font-semibold text-[#555]">
+                    <input type="checkbox" @bind="_gateEnabled" />
+                    Enabled
+                </label>
+                @if (!string.IsNullOrEmpty(_gateError))
+                {
+                    <p class="text-xs text-[#c23b1f] font-semibold">@_gateError</p>
+                }
+            </div>
+            <div class="flex items-center justify-end gap-2 px-5 py-3.5 border-t border-[#eee] bg-[#fafafa] rounded-b-lg">
+                <button class="px-3.5 py-1.5 rounded text-sm font-semibold cursor-pointer text-[#555] hover:bg-[#eee]" @onclick="CloseGateModal">Cancel</button>
+                <button class="px-3.5 py-1.5 rounded text-sm font-semibold cursor-pointer bg-[#1a5fb4] text-white hover:bg-[#164e93]" @onclick="SaveGate">Save Gate</button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (_showCameraModal)
+{
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" @onclick="CloseCameraModal">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md" @onclick:stopPropagation="true">
+            <div class="flex items-center justify-between px-5 py-3.5 border-b border-[#eee]">
+                <h3 class="font-bold text-sm text-[#222]">@(_editingCameraId == null ? "Add Camera" : "Edit Camera")</h3>
+                <button class="text-[#777] hover:text-[#222] text-lg leading-none cursor-pointer" @onclick="CloseCameraModal">&#10005;</button>
+            </div>
+            <div class="p-5 flex flex-col gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-[#555]">Lane <span class="text-[#c23b1f]">*</span></label>
+                    <select @bind="_gateName" disabled="@(_editingCameraId != null)" class="border border-[#ccc] rounded px-2 py-1.5 text-sm disabled:bg-[#f5f5f5] disabled:text-[#777]">
+                        @foreach (var gate in _gates)
+                        {
+                            <option value="@gate.Name">@gate.DisplayName (@gate.Kind)</option>
+                        }
+                    </select>
+                    @if (_editingCameraId == null && CameraConfigStore.FindByGate(_gateName) != null)
+                    {
+                        <p class="text-[0.68rem] text-[#b0700a] font-semibold">This lane already has a camera -- saving will replace it (one camera per lane).</p>
+                    }
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-[#555]">Camera Name</label>
+                    <input @bind="_cameraName" placeholder="e.g. entry_camera" class="border border-[#ccc] rounded px-2 py-1.5 text-sm" />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-[#555]">Camera IP Address <span class="text-[#c23b1f]">*</span></label>
+                    <input @bind="_ip" placeholder="e.g. 192.168.1.110" class="border border-[#ccc] rounded px-2 py-1.5 text-sm" />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-[#555]">Username</label>
+                    <input @bind="_username" placeholder="leave blank if none" class="border border-[#ccc] rounded px-2 py-1.5 text-sm" />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-[#555]">Password</label>
+                    <input type="password" @bind="_password" placeholder="leave blank if none" class="border border-[#ccc] rounded px-2 py-1.5 text-sm" />
+                </div>
+                <label class="flex items-center gap-2 text-xs font-semibold text-[#555]">
+                    <input type="checkbox" @bind="_cameraEnabled" />
+                    Enabled
+                </label>
+                @if (!string.IsNullOrEmpty(_cameraError))
+                {
+                    <p class="text-xs text-[#c23b1f] font-semibold">@_cameraError</p>
+                }
+            </div>
+            <div class="flex items-center justify-end gap-2 px-5 py-3.5 border-t border-[#eee] bg-[#fafafa] rounded-b-lg">
+                <button class="px-3.5 py-1.5 rounded text-sm font-semibold cursor-pointer text-[#555] hover:bg-[#eee]" @onclick="CloseCameraModal">Cancel</button>
+                <button class="px-3.5 py-1.5 rounded text-sm font-semibold cursor-pointer bg-[#1a5fb4] text-white hover:bg-[#164e93]" @onclick="SaveCamera">Save Camera</button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (_showControllerModal)
+{
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" @onclick="CloseControllerModal">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md" @onclick:stopPropagation="true">
+            <div class="flex items-center justify-between px-5 py-3.5 border-b border-[#eee]">
+                <h3 class="font-bold text-sm text-[#222]">@(_editingControllerId == null ? "Add Controller" : "Edit Controller")</h3>
+                <button class="text-[#777] hover:text-[#222] text-lg leading-none cursor-pointer" @onclick="CloseControllerModal">&#10005;</button>
+            </div>
+            <div class="p-5 flex flex-col gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-[#555]">Lane <span class="text-[#c23b1f]">*</span></label>
+                    <select @bind="_gateName" disabled="@(_editingControllerId != null)" class="border border-[#ccc] rounded px-2 py-1.5 text-sm disabled:bg-[#f5f5f5] disabled:text-[#777]">
+                        @foreach (var gate in _gates)
+                        {
+                            <option value="@gate.Name">@gate.DisplayName (@gate.Kind)</option>
+                        }
+                    </select>
+                    @if (_editingControllerId == null && ControllerConfigStore.FindByGate(_gateName) != null)
+                    {
+                        <p class="text-[0.68rem] text-[#b0700a] font-semibold">This lane already has a controller -- saving will replace it (one controller per lane).</p>
+                    }
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-[#555]">Controller IP Address <span class="text-[#c23b1f]">*</span></label>
+                    <input @bind="_tcpBindAddress" placeholder="e.g. 192.168.1.151" class="border border-[#ccc] rounded px-2 py-1.5 text-sm" />
+                </div>
+                <label class="flex items-center gap-2 text-xs font-semibold text-[#555]">
+                    <input type="checkbox" @bind="_controllerEnabled" />
+                    Enabled
+                </label>
+                @if (!string.IsNullOrEmpty(_controllerError))
+                {
+                    <p class="text-xs text-[#c23b1f] font-semibold">@_controllerError</p>
+                }
+            </div>
+            <div class="flex items-center justify-end gap-2 px-5 py-3.5 border-t border-[#eee] bg-[#fafafa] rounded-b-lg">
+                <button class="px-3.5 py-1.5 rounded text-sm font-semibold cursor-pointer text-[#555] hover:bg-[#eee]" @onclick="CloseControllerModal">Cancel</button>
+                <button class="px-3.5 py-1.5 rounded text-sm font-semibold cursor-pointer bg-[#1a5fb4] text-white hover:bg-[#164e93]" @onclick="SaveController">Save Controller</button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (_showDisplayModal)
+{
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" @onclick="CloseDisplayModal">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md" @onclick:stopPropagation="true">
+            <div class="flex items-center justify-between px-5 py-3.5 border-b border-[#eee]">
+                <h3 class="font-bold text-sm text-[#222]">@(_editingDisplayId == null ? "Add Display" : "Edit Display")</h3>
+                <button class="text-[#777] hover:text-[#222] text-lg leading-none cursor-pointer" @onclick="CloseDisplayModal">&#10005;</button>
+            </div>
+            <div class="p-5 flex flex-col gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-[#555]">Lane <span class="text-[#c23b1f]">*</span></label>
+                    <select @bind="_gateName" disabled="@(_editingDisplayId != null)" class="border border-[#ccc] rounded px-2 py-1.5 text-sm disabled:bg-[#f5f5f5] disabled:text-[#777]">
+                        @foreach (var gate in _gates)
+                        {
+                            <option value="@gate.Name">@gate.DisplayName (@gate.Kind)</option>
+                        }
+                    </select>
+                    @if (_editingDisplayId == null && DisplayConfigStore.FindByGate(_gateName) != null)
+                    {
+                        <p class="text-[0.68rem] text-[#b0700a] font-semibold">This lane already has a display -- saving will replace it (one display per lane).</p>
+                    }
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-[#555]">Display ID <span class="text-[#c23b1f]">*</span></label>
+                    <input type="number" @bind="_displayId" placeholder="e.g. 1" class="border border-[#ccc] rounded px-2 py-1.5 text-sm" />
+                    <span class="text-[0.65rem] text-[#777]">Each display board's own address on the shared USB bus -- must be unique per board.</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-[#555]">COM Port</label>
+                    <input value="@(string.IsNullOrEmpty(DisplayBusSettingsStore.ComPort) ? "(not set)" : DisplayBusSettingsStore.ComPort)" readonly
+                           class="border border-[#ccc] rounded px-2 py-1.5 text-sm bg-[#f5f5f5] text-[#777] cursor-not-allowed" />
+                    <span class="text-[0.65rem] text-[#777]">Shared by every display on site -- set once in the "Display Bus COM Port" field above, not per display.</span>
+                </div>
+                <label class="flex items-center gap-2 text-xs font-semibold text-[#555]">
+                    <input type="checkbox" @bind="_displayEnabled" />
+                    Enabled
+                </label>
+                @if (!string.IsNullOrEmpty(_displayError))
+                {
+                    <p class="text-xs text-[#c23b1f] font-semibold">@_displayError</p>
+                }
+            </div>
+            <div class="flex items-center justify-end gap-2 px-5 py-3.5 border-t border-[#eee] bg-[#fafafa] rounded-b-lg">
+                <button class="px-3.5 py-1.5 rounded text-sm font-semibold cursor-pointer text-[#555] hover:bg-[#eee]" @onclick="CloseDisplayModal">Cancel</button>
+                <button class="px-3.5 py-1.5 rounded text-sm font-semibold cursor-pointer bg-[#1a5fb4] text-white hover:bg-[#164e93]" @onclick="SaveDisplay">Save Display</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<GateOptions> _gates = new();
+    private string _gateName = "";
+
+    private bool _showGateModal;
+    private long? _editingGateId;
+    private string _editingGateInternalName = "";
+    private string _gateDisplayName = "";
+    private GateKind _gateKind = GateKind.Entry;
+    private bool _gateEnabled = true;
+    private string _gateError = "";
+
+    private bool _showCameraModal;
+    private long? _editingCameraId;
+    private string _cameraName = "";
+    private string _ip = "";
+    private string _username = "";
+    private string _password = "";
+    private bool _cameraEnabled = true;
+    private string _cameraError = "";
+
+    private bool _showControllerModal;
+    private long? _editingControllerId;
+    private string _tcpBindAddress = "";
+    private int _tcpPort = 6000;
+    private int _debounceMs = 50;
+    private bool _controllerEnabled = true;
+    private string _controllerError = "";
+
+    private bool _showDisplayModal;
+    private long? _editingDisplayId;
+    private int _displayId = 1;
+    private bool _displayEnabled = true;
+    private string _displayError = "";
+
+    private string _displayBusComPort = "";
+    private List<string> AvailableComPorts { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        _gates = GateConfigStore.All.ToList();
+        AvailableComPorts = System.IO.Ports.SerialPort.GetPortNames().OrderBy(p => p).ToList();
+        _displayBusComPort = DisplayBusSettingsStore.ComPort;
+
+        GateConfigStore.Changed += OnChanged;
+        CameraConfigStore.Changed += OnChanged;
+        ControllerConfigStore.Changed += OnChanged;
+        DisplayConfigStore.Changed += OnChanged;
+        DisplayBusSettingsStore.Changed += OnChanged;
+        foreach (var state in GateStateStore.All)
+        {
+            state.Changed += OnChanged;
+        }
+    }
+
+    private void SaveDisplayBusComPort() => DisplayBusSettingsStore.SetComPort(_displayBusComPort);
+
+    private void OnChanged()
+    {
+        _gates = GateConfigStore.All.ToList();
+        InvokeAsync(StateHasChanged);
+    }
+
+    // ---- Gate modal ----
+
+    private void OpenAddGate()
+    {
+        _editingGateId = null;
+        _editingGateInternalName = "";
+        _gateDisplayName = "";
+        _gateKind = GateKind.Entry;
+        _gateEnabled = true;
+        _gateError = "";
+        _showGateModal = true;
+    }
+
+    private void OpenEditGate(GateOptions gate)
+    {
+        _editingGateId = gate.Id;
+        _editingGateInternalName = gate.Name;
+        _gateDisplayName = gate.DisplayName;
+        _gateKind = gate.Kind;
+        _gateEnabled = gate.Enabled;
+        _gateError = "";
+        _showGateModal = true;
+    }
+
+    private void CloseGateModal() => _showGateModal = false;
+
+    private void SaveGate()
+    {
+        if (string.IsNullOrWhiteSpace(_gateDisplayName))
+        {
+            _gateError = "Enter a name for this lane.";
+            return;
+        }
+        if (_editingGateId is { } id)
+        {
+            GateConfigStore.Update(id, _gateDisplayName, _gateKind, _gateEnabled);
+        }
+        else
+        {
+            GateConfigStore.Add(_gateDisplayName, _gateKind, _gateEnabled);
+        }
+        _showGateModal = false;
+    }
+
+    /// <summary>Removing a gate also removes whatever camera/controller/
+    /// display was assigned to it -- leaving those behind would just be
+    /// dead entries pointing at a gate that no longer exists.</summary>
+    private void RemoveGate(GateOptions gate)
+    {
+        var camera = CameraConfigStore.FindByGate(gate.Name);
+        if (camera != null)
+        {
+            CameraConfigStore.Remove(camera.Id);
+        }
+        var controller = ControllerConfigStore.FindByGate(gate.Name);
+        if (controller != null)
+        {
+            ControllerConfigStore.Remove(controller.Id);
+        }
+        var display = DisplayConfigStore.FindByGate(gate.Name);
+        if (display != null)
+        {
+            DisplayConfigStore.Remove(display.Id);
+        }
+        GateConfigStore.Remove(gate.Id);
+    }
+
+    private string GateDisplayName(string gateName) =>
+        _gates.FirstOrDefault(g => g.Name == gateName)?.DisplayName ?? gateName;
+
+    // ---- Camera modal ----
+
+    private void OpenAddCamera()
+    {
+        _editingCameraId = null;
+        _gateName = _gates.FirstOrDefault()?.Name ?? "";
+        _cameraName = "";
+        _ip = "";
+        _username = "";
+        _password = "";
+        _cameraEnabled = true;
+        _cameraError = "";
+        _showCameraModal = true;
+    }
+
+    private void OpenEditCamera(CameraConfigEntry entry)
+    {
+        _editingCameraId = entry.Id;
+        _gateName = entry.GateName;
+        _cameraName = entry.Name;
+        _ip = entry.Ip;
+        _username = entry.Username;
+        _password = entry.Password;
+        _cameraEnabled = entry.Enabled;
+        _cameraError = "";
+        _showCameraModal = true;
+    }
+
+    private void CloseCameraModal() => _showCameraModal = false;
+
+    private void SaveCamera()
+    {
+        if (string.IsNullOrWhiteSpace(_gateName))
+        {
+            _cameraError = "Select a lane.";
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(_ip))
+        {
+            _cameraError = "Enter the camera's IP address.";
+            return;
+        }
+        var cameraIpConflict = CameraConfigStore.All.FirstOrDefault(c =>
+            c.Ip.Trim().Equals(_ip.Trim(), StringComparison.OrdinalIgnoreCase) &&
+            c.GateName != _gateName &&
+            c.Id != (_editingCameraId ?? -1));
+        if (cameraIpConflict != null)
+        {
+            _cameraError = $"IP address {_ip} is already assigned to the camera on lane \"{GateDisplayName(cameraIpConflict.GateName)}\" -- one physical camera can't be two lanes at once.";
+            return;
+        }
+        CameraConfigStore.UpsertForGate(
+            _gateName, _cameraName, _ip, source: "rtsp", testImageDir: "",
+            _username, _password, rtspPort: 554, rtspStreamPath: "/", _cameraEnabled);
+        _showCameraModal = false;
+    }
+
+    // ---- Controller modal ----
+
+    private void OpenAddController()
+    {
+        _editingControllerId = null;
+        _gateName = _gates.FirstOrDefault()?.Name ?? "";
+        _tcpBindAddress = "";
+        _tcpPort = 6000;
+        _debounceMs = 50;
+        _controllerEnabled = true;
+        _controllerError = "";
+        _showControllerModal = true;
+    }
+
+    private void OpenEditController(ControllerConfigEntry entry)
+    {
+        _editingControllerId = entry.Id;
+        _gateName = entry.GateName;
+        _tcpBindAddress = entry.TcpBindAddress;
+        _tcpPort = 6000;
+        _debounceMs = entry.DebounceMs;
+        _controllerEnabled = entry.Enabled;
+        _controllerError = "";
+        _showControllerModal = true;
+    }
+
+    private void CloseControllerModal() => _showControllerModal = false;
+
+    private void SaveController()
+    {
+        if (string.IsNullOrWhiteSpace(_gateName))
+        {
+            _controllerError = "Select a lane.";
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(_tcpBindAddress))
+        {
+            _controllerError = "Enter the controller's IP address.";
+            return;
+        }
+        var controllerIpConflict = ControllerConfigStore.All.FirstOrDefault(c =>
+            c.TcpBindAddress.Trim().Equals(_tcpBindAddress.Trim(), StringComparison.OrdinalIgnoreCase) &&
+            c.GateName != _gateName &&
+            c.Id != (_editingControllerId ?? -1));
+        if (controllerIpConflict != null)
+        {
+            _controllerError = $"IP address {_tcpBindAddress} is already assigned to the controller on lane \"{GateDisplayName(controllerIpConflict.GateName)}\" -- one physical controller can't be two lanes at once.";
+            return;
+        }
+        ControllerConfigStore.UpsertForGate(
+            _gateName, source: "tcp", _tcpBindAddress, _tcpPort, _debounceMs,
+            simulatedVehicleIntervalSeconds: 0, simulatedPresentSeconds: 0, _controllerEnabled);
+        _showControllerModal = false;
+    }
+
+    // ---- Display modal ----
+
+    private void OpenAddDisplay()
+    {
+        _editingDisplayId = null;
+        _gateName = _gates.FirstOrDefault()?.Name ?? "";
+        _displayId = 1;
+        _displayEnabled = true;
+        _displayError = "";
+        _showDisplayModal = true;
+    }
+
+    private void OpenEditDisplay(DisplayConfigEntry entry)
+    {
+        _editingDisplayId = entry.Id;
+        _gateName = entry.GateName;
+        _displayId = entry.DisplayId;
+        _displayEnabled = entry.Enabled;
+        _displayError = "";
+        _showDisplayModal = true;
+    }
+
+    private void CloseDisplayModal() => _showDisplayModal = false;
+
+    private void SaveDisplay()
+    {
+        if (string.IsNullOrWhiteSpace(_gateName))
+        {
+            _displayError = "Select a lane.";
+            return;
+        }
+        var displayIdConflict = DisplayConfigStore.All.FirstOrDefault(d =>
+            d.DisplayId == _displayId &&
+            d.GateName != _gateName &&
+            d.Id != (_editingDisplayId ?? -1));
+        if (displayIdConflict != null)
+        {
+            _displayError = $"Display ID {_displayId} is already used by the display on lane \"{GateDisplayName(displayIdConflict.GateName)}\" -- every board on the shared bus needs its own unique ID.";
+            return;
+        }
+        DisplayConfigStore.UpsertForGate(_gateName, _displayId, _displayEnabled);
+        _showDisplayModal = false;
+    }
+
+    /// <summary>Manual barrier actuation test -- operates the gate's real
+    /// running controller (the same instance GateWorkerHostedService uses,
+    /// via BarrierControllerRegistry) so an operator can confirm the
+    /// barrier actually moves, on demand. Only "Open" is offered here --
+    /// closing is the controller's/vehicle-clear logic's job during a real
+    /// pass, not something a test button needs to redo. Cameras don't need
+    /// an equivalent button -- their live video tile on the dashboard
+    /// already proves the connection works.</summary>
+    private async Task TestOpenBarrier(string gateName)
+    {
+        var controller = BarrierControllerRegistry.Find(gateName);
+        if (controller == null)
+        {
+            return;
+        }
+        await controller.OpenBarrierAsync();
+        GateStateStore.Find(gateName)?.SetBarrierOpen(true);
+    }
+
+    /// <summary>Sends a literal "TEST" message to this one display board
+    /// (addressed by its own DisplayId on the shared bus) so an operator
+    /// can confirm it's wired up and showing text correctly.</summary>
+    private void TestDisplay(DisplayConfigEntry display) =>
+        VehicleDisplayBus.Send(DisplayBusSettingsStore.ComPort, display.DisplayId, "TEST");
+
+    public void Dispose()
+    {
+        GateConfigStore.Changed -= OnChanged;
+        CameraConfigStore.Changed -= OnChanged;
+        ControllerConfigStore.Changed -= OnChanged;
+        DisplayConfigStore.Changed -= OnChanged;
+        DisplayBusSettingsStore.Changed -= OnChanged;
+        foreach (var state in GateStateStore.All)
+        {
+            state.Changed -= OnChanged;
+        }
+    }
+}

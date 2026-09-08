@@ -1,0 +1,49 @@
+New https://pypi.org/project/ultralytics/8.4.140 available 😃 Update with 'pip install -U ultralytics'
+Ultralytics 8.3.40 🚀 Python-3.11.9 torch-2.2.2+cpu CPU (Intel Core(TM) i7-8665U 1.90GHz)
+[34m[1mengine\trainer: [0mtask=detect, mode=train, model=yolov8n.pt, data=D:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\data.yaml, epochs=40, time=None, patience=100, batch=16, imgsz=640, save=True, save_period=-1, cache=False, device=cpu, workers=8, project=D:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\runs, name=foreign_object_synthetic, exist_ok=True, pretrained=True, optimizer=auto, verbose=True, seed=0, deterministic=True, single_cls=False, rect=False, cos_lr=False, close_mosaic=10, resume=False, amp=True, fraction=1.0, profile=False, freeze=None, multi_scale=False, overlap_mask=True, mask_ratio=4, dropout=0.0, val=True, split=val, save_json=False, save_hybrid=False, conf=None, iou=0.7, max_det=300, half=False, dnn=False, plots=True, source=None, vid_stride=1, stream_buffer=False, visualize=False, augment=False, agnostic_nms=False, classes=None, retina_masks=False, embed=None, show=False, save_frames=False, save_txt=False, save_conf=False, save_crop=False, show_labels=True, show_conf=True, show_boxes=True, line_width=None, format=torchscript, keras=False, optimize=False, int8=False, dynamic=False, simplify=True, opset=None, workspace=None, nms=False, lr0=0.01, lrf=0.01, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=7.5, cls=0.5, dfl=1.5, pose=12.0, kobj=1.0, nbs=64, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, bgr=0.0, mosaic=1.0, mixup=0.0, copy_paste=0.0, copy_paste_mode=flip, auto_augment=randaugment, erasing=0.4, crop_fraction=1.0, cfg=None, tracker=botsort.yaml, save_dir=D:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\runs\foreign_object_synthetic
+Downloading https://ultralytics.com/assets/Arial.ttf to 'C:\Users\sjay8\AppData\Roaming\Ultralytics\Arial.ttf'...
+  0%|          | 0.00/755k [00:00<?, ?B/s] 28%|##7       | 208k/755k [00:00<00:00, 2.11MB/s] 55%|#####5    | 416k/755k [00:00<00:00, 1.77MB/s]100%|##########| 755k/755k [00:00<00:00, 2.49MB/s]
+Overriding model.yaml nc=80 with nc=1
+
+                   from  n    params  module                                       arguments                     
+  0                  -1  1       464  ultralytics.nn.modules.conv.Conv             [3, 16, 3, 2]                 
+  1                  -1  1      4672  ultralytics.nn.modules.conv.Conv             [16, 32, 3, 2]                
+  2                  -1  1      7360  ultralytics.nn.modules.block.C2f             [32, 32, 1, True]             
+  3                  -1  1     18560  ultralytics.nn.modules.conv.Conv             [32, 64, 3, 2]                
+  4                  -1  2     49664  ultralytics.nn.modules.block.C2f             [64, 64, 2, True]             
+  5                  -1  1     73984  ultralytics.nn.modules.conv.Conv             [64, 128, 3, 2]               
+  6                  -1  2    197632  ultralytics.nn.modules.block.C2f             [128, 128, 2, True]           
+  7                  -1  1    295424  ultralytics.nn.modules.conv.Conv             [128, 256, 3, 2]              
+  8                  -1  1    460288  ultralytics.nn.modules.block.C2f             [256, 256, 1, True]           
+  9                  -1  1    164608  ultralytics.nn.modules.block.SPPF            [256, 256, 5]                 
+ 10                  -1  1         0  torch.nn.modules.upsampling.Upsample         [None, 2, 'nearest']          
+ 11             [-1, 6]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 12                  -1  1    148224  ultralytics.nn.modules.block.C2f             [384, 128, 1]                 
+ 13                  -1  1         0  torch.nn.modules.upsampling.Upsample         [None, 2, 'nearest']          
+ 14             [-1, 4]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 15                  -1  1     37248  ultralytics.nn.modules.block.C2f             [192, 64, 1]                  
+ 16                  -1  1     36992  ultralytics.nn.modules.conv.Conv             [64, 64, 3, 2]                
+ 17            [-1, 12]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 18                  -1  1    123648  ultralytics.nn.modules.block.C2f             [192, 128, 1]                 
+ 19                  -1  1    147712  ultralytics.nn.modules.conv.Conv             [128, 128, 3, 2]              
+ 20             [-1, 9]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 21                  -1  1    493056  ultralytics.nn.modules.block.C2f             [384, 256, 1]                 
+ 22        [15, 18, 21]  1    751507  ultralytics.nn.modules.head.Detect           [1, [64, 128, 256]]           
+Model summary: 225 layers, 3,011,043 parameters, 3,011,027 gradients, 8.2 GFLOPs
+
+Transferred 319/355 items from pretrained weights
+Freezing layer 'model.22.dfl.conv.weight'
+[34m[1mtrain: [0mScanning D:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\labels\train...:   0%|          | 0/240 [00:00<?, ?it/s][34m[1mtrain: [0mScanning D:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\labels\train... 92 images, 0 backgrounds, 0 corrupt:  38%|###8      | 92/240 [00:00<00:00, 911.28it/s][34m[1mtrain: [0mScanning D:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\labels\train... 196 images, 0 backgrounds, 0 corrupt:  82%|########1 | 196/240 [00:00<00:00, 982.98it/s][34m[1mtrain: [0mScanning D:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\labels\train... 240 images, 0 backgrounds, 0 corrupt: 100%|##########| 240/240 [00:00<00:00, 965.96it/s]
+[34m[1mtrain: [0mNew cache created: D:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\labels\train.cache
+[34m[1mval: [0mScanning D:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\labels\val...:   0%|          | 0/60 [00:00<?, ?it/s][34m[1mval: [0mScanning D:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\labels\val... 60 images, 0 backgrounds, 0 corrupt: 100%|##########| 60/60 [00:00<00:00, 654.23it/s]
+[34m[1mval: [0mNew cache created: D:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\labels\val.cache
+Plotting labels to D:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\runs\foreign_object_synthetic\labels.jpg... 
+[34m[1moptimizer:[0m 'optimizer=auto' found, ignoring 'lr0=0.01' and 'momentum=0.937' and determining best 'optimizer', 'lr0' and 'momentum' automatically... 
+[34m[1moptimizer:[0m AdamW(lr=0.002, momentum=0.9) with parameter groups 57 weight(decay=0.0), 64 weight(decay=0.0005), 63 bias(decay=0.0)
+Image sizes 640 train, 640 val
+Using 0 dataloader workers
+Logging results to [1mD:\bhikaji\bhikajianpr\uvss-service\model_conversion\foreign_object_training\runs\foreign_object_synthetic[0m
+Starting training for 40 epochs...
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+  0%|          | 0/15 [00:00<?, ?it/s]       1/40         0G     0.7139      4.046     0.9101         19        640:   0%|          | 0/15 [00:29<?, ?it/s]       1/40         0G     0.7139      4.046     0.9101         19        640:   7%|6         | 1/15 [00:29<06:59, 29.96s/it]       1/40         0G     0.7957      4.007       0.95         23        640:   7%|6         | 1/15 [00:58<06:59, 29.96s/it]       1/40         0G     0.7957      4.007       0.95         23        640:  13%|#3        | 2/15 [00:58<06:16, 28.99s/it]       1/40         0G     0.7726      3.945     0.9615         20        640:  13%|#3        | 2/15 [01:28<06:16, 28.99s/it]       1/40         0G     0.7726      3.945     0.9615         20        640:  20%|##        | 3/15 [01:28<05:54, 29.54s/it]       1/40         0G     0.7131      3.958      0.955         16        640:  20%|##        | 3/15 [02:00<05:54, 29.54s/it]       1/40         0G     0.7131      3.958      0.955         16        640:  27%|##6       | 4/15 [02:00<05:34, 30.41s/it]       1/40         0G     0.6732      3.878     0.9341         25        640:  27%|##6       | 4/15 [02:27<05:34, 30.41s/it]       1/40         0G     0.6732      3.878     0.9341         25        640:  33%|###3      | 5/15 [02:27<04:52, 29.23s/it]       1/40         0G     0.6411      3.864     0.9139         18        640:  33%|###3      | 5/15 [02:46<04:52, 29.23s/it]       1/40         0G     0.6411      3.864     0.9139         18        640:  40%|####      | 6/15 [02:46<03:52, 25.79s/it]       1/40         0G     0.6122      3.775     0.9077         24        640:  40%|####      | 6/15 [03:12<03:52, 25.79s/it]       1/40         0G     0.6122      3.775     0.9077         24        640:  47%|####6     | 7/15 [03:12<03:28, 26.03s/it]       1/40         0G     0.5984      3.682     0.9063         31        640:  47%|####6     | 7/15 [03:26<03:28, 26.03s/it]       1/40         0G     0.5984      3.682     0.9063         31        640:  53%|#####3    | 8/15 [03:26<02:34, 22.08s/it]       1/40         0G     0.5925      3.566      0.901         29        640:  53%|#####3    | 8/15 [03:50<02:34, 22.08s/it]       1/40         0G     0.5925      3.566      0.901         29        640:  60%|######    | 9/15 [03:50<02:16, 22.67s/it]

@@ -1,0 +1,260 @@
+@page "/"
+@rendermode InteractiveServer
+@using UvssService.Config
+@using UvssService.Lanes
+@using UvssService.Ocr
+@inject GateStateStore GateStateStore
+@inject EventLogStore EventLogStore
+@inject CameraConfigStore CameraConfigStore
+@inject GateConfigStore GateConfigStore
+@implements IDisposable
+
+<PageTitle>ANPR Dashboard</PageTitle>
+
+<div class="h-full w-full flex flex-col gap-0 m-0 p-0 box-border text-[#222]">
+    <section class="flex-1 flex flex-col gap-1 min-w-0 min-h-0 bg-[#ececec] border border-[#ccc] m-0 p-1 box-border">
+        <div class="flex-1 min-w-0 min-h-0 grid grid-cols-[3fr_1fr] gap-1.5">
+
+            <!-- Dynamic camera wall: one tile per configured camera, laid
+                 out as close to a square as possible (see ComputeRowCounts)
+                 -- any row that can't fill a full set of columns goes on
+                 top (its cells stretched wider), full rows go below, e.g.
+                 3 cameras = 1 wide tile on top + 2 below; 4 = an even 2x2;
+                 this holds for any camera count up to 12 without a
+                 special-cased layout per count. -->
+            <div class="min-w-0 min-h-0 flex flex-col gap-1.5">
+                @foreach (var row in _cameraRows)
+                {
+                    <div class="flex-1 min-h-0 flex flex-row gap-1.5">
+                        @foreach (var gate in row)
+                        {
+                            var state = GateStateStore.Find(gate.Name);
+                            <div class="flex-1 min-w-0 relative bg-[#e2e2e2] border border-[#ccc] overflow-hidden">
+                                <img class="w-full h-full object-cover block" src="/stream/@gate.Name/video" alt="@gate.DisplayName video" />
+                                <div class="absolute top-1.5 left-1.5 z-10 flex items-center gap-2 bg-black/55 text-white text-[0.68rem] font-bold px-2 py-1 rounded">
+                                    <span class="font-extrabold tracking-wide">@gate.DisplayName.ToUpperInvariant()</span>
+                                    <span class="flex items-center gap-1">
+                                        <span class="w-2 h-2 rounded-full @(state?.VehiclePresent == true ? "bg-[#39d353]" : "bg-[#777]")"></span>
+                                        @(state?.VehiclePresent == true ? "VEHICLE" : "CLEAR")
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <span class="w-2 h-2 rounded-full @(state?.BarrierOpen == true ? "bg-[#39d353]" : "bg-[#c23b1f]")"></span>
+                                        @(state?.BarrierOpen == true ? "OPEN" : "CLOSED")
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                @if (_cameraRows.Count == 0)
+                {
+                    <div class="flex-1 flex items-center justify-center text-[#777] text-[0.85rem]">No cameras configured yet -- add one on the Lane Setup page.</div>
+                }
+            </div>
+
+            <!-- Sidebar: today's event log across every gate (each row
+                 tagged with gate + plate colour/vehicle-type category) on
+                 top, and underneath it a frozen proof image of the most
+                 recently processed vehicle -- the live feed alone isn't
+                 enough evidence once that vehicle has actually driven out
+                 of frame, so this keeps a still of it (with plate/gate/
+                 time) visible until the next one arrives. -->
+            <aside class="min-w-0 min-h-0 bg-[#ececec] border border-[#ccc] flex flex-col p-1.5 gap-1.5 box-border overflow-hidden">
+                <!-- Fixed height = exactly 4 rows (h-20 each, no gap
+                     between them so 4 * 80px fits exactly -- border-b on
+                     each row still separates them visually); anything
+                     beyond that scrolls instead of growing/shrinking the
+                     panel. -->
+                <div class="h-80 shrink-0 min-w-0 overflow-y-auto overflow-x-hidden flex flex-col">
+                    @foreach (var entry in ReadableLogEntries)
+                    {
+                        <div class="h-20 shrink-0 flex flex-row items-stretch gap-1.5 min-w-0 border-b border-[#ccc] p-1.5 text-xs cursor-pointer hover:bg-[#e2e2e2]"
+                             @onclick="() => SelectEntry(entry.Id)">
+                            <div class="w-[38%] min-w-0 bg-white overflow-hidden border border-[#bbb] flex items-center justify-center">
+                                @if (entry.PlateCropJpeg is { } plateThumbJpeg)
+                                {
+                                    <img class="w-full h-full object-contain block" src="@ToDataUrl(plateThumbJpeg)" alt="plate" />
+                                }
+                            </div>
+                            <div class="w-[62%] min-w-0 flex flex-col justify-center gap-[2px]">
+                                <span class="text-[#777] text-[0.62rem] break-words">
+                                    @entry.Timestamp.ToString("HH:mm:ss")
+                                </span>
+                                <span class="flex items-center gap-1 text-[0.66rem] font-bold @GateBadgeTextClass(entry.GateKind)">
+                                    <span class="w-1.5 h-1.5 rounded-full inline-block shrink-0 @GateBadgeDotClass(entry.GateKind)"></span>
+                                    <span class="min-w-0 break-words">@(entry.GateDisplayName.ToUpperInvariant())</span>
+                                </span>
+                                <span class="flex items-center gap-1 text-[0.78rem] flex-wrap">
+                                    <span class="font-bold text-[#111] min-w-0 break-words">@entry.PlateText</span>
+                                    <span class="text-[0.58rem] font-bold shrink-0 @AdmissionBadgeClass(entry.Admission)">
+                                        @entry.Admission.ToString().ToUpperInvariant()
+                                    </span>
+                                </span>
+                                <span class="px-1.5 py-[1px] rounded text-[0.58rem] font-bold w-fit @PlateColorBadgeClass(entry.PlateColorCategory)">
+                                    @PlateColorClassifier.CategoryLabel(entry.PlateColorCategory)
+                                </span>
+                            </div>
+                        </div>
+                    }
+                    @if (ReadableLogEntries.Count == 0)
+                    {
+                        <p class="text-[#777] text-[0.85rem]">no events yet</p>
+                    }
+                </div>
+
+                <!-- Last captured vehicle -- proof shot for whichever pass
+                     most recently completed, across every gate. -->
+                <div class="flex-1 min-h-0 min-w-0 relative bg-[#e2e2e2] border border-[#ccc] overflow-hidden flex items-center justify-center">
+                    @{ var shown = SelectedEntry ?? ReadableLogEntries.FirstOrDefault(); }
+                    @if (shown?.VehicleFrameJpeg is { } shownVehicleJpeg)
+                    {
+                        <img class="w-full h-full object-cover block" src="@ToDataUrl(shownVehicleJpeg)" alt="captured vehicle" />
+                    }
+                    else
+                    {
+                        <span class="text-[#777] text-[0.78rem]">no vehicle captured yet</span>
+                    }
+                </div>
+            </aside>
+        </div>
+    </section>
+</div>
+
+@code {
+    private List<GateOptions> _gates = new();
+    private List<List<GateOptions>> _cameraRows = new();
+
+    // A pass where the plate genuinely couldn't be read isn't shown in the
+    // sidebar at all -- there's nothing meaningful to display (no OCR text,
+    // no fallback image), and a "PLATE NOT READ" placeholder row would just
+    // push the last real read further down. The underlying EventLogStore
+    // still keeps every pass (read or not) for Scan History/Analytics --
+    // this only filters what the live sidebar renders.
+    private List<EventLogEntry> ReadableLogEntries =>
+        EventLogStore.Recent(200).Where(e => !string.IsNullOrEmpty(e.PlateText)).ToList();
+
+    // Clicking a sidebar row pins the vehicle-image panel to THAT pass's
+    // photo for a couple of seconds -- proof-of-identity for an older
+    // event, without needing a "back to live" button: it just reverts to
+    // showing the latest vehicle on its own once the timer fires.
+    private static readonly TimeSpan SelectionDwellTime = TimeSpan.FromSeconds(2);
+    private long? _selectedEntryId;
+    private System.Threading.Timer? _revertTimer;
+
+    private EventLogEntry? SelectedEntry =>
+        _selectedEntryId is { } id ? ReadableLogEntries.FirstOrDefault(e => e.Id == id) : null;
+
+    private void SelectEntry(long entryId)
+    {
+        _selectedEntryId = entryId;
+        _revertTimer?.Dispose();
+        _revertTimer = new System.Threading.Timer(_ =>
+        {
+            _ = InvokeAsync(() =>
+            {
+                _selectedEntryId = null;
+                StateHasChanged();
+            });
+        }, null, SelectionDwellTime, Timeout.InfiniteTimeSpan);
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        _gates = GateConfigStore.All.Where(g => g.Enabled).ToList();
+        _cameraRows = BuildCameraRows(_gates, CameraConfigStore);
+
+        foreach (var state in GateStateStore.All)
+        {
+            state.Changed += OnChanged;
+        }
+        EventLogStore.Changed += OnChanged;
+    }
+
+    private void OnChanged() => InvokeAsync(StateHasChanged);
+
+    /// <summary>Entry first, then every other gate in config order,
+    /// restricted to gates that actually have a camera configured --
+    /// grouped into rows via ComputeRowCounts.</summary>
+    private static List<List<GateOptions>> BuildCameraRows(List<GateOptions> gates, CameraConfigStore cameraConfigStore)
+    {
+        var withCameras = gates
+            .Where(g => cameraConfigStore.FindByGate(g.Name) != null)
+            .OrderBy(g => g.Kind == GateKind.Entry ? 0 : 1)
+            .ToList();
+
+        var rowCounts = ComputeRowCounts(withCameras.Count);
+        var rows = new List<List<GateOptions>>();
+        var index = 0;
+        foreach (var count in rowCounts)
+        {
+            rows.Add(withCameras.Skip(index).Take(count).ToList());
+            index += count;
+        }
+        return rows;
+    }
+
+    /// <summary>Splits N tiles into rows as close to a square grid as
+    /// possible: cols = ceil(sqrt(N)), then as many full rows of `cols` as
+    /// fit, with any leftover (a row that wouldn't fill up) placed FIRST so
+    /// it reads as "the odd row is on top", e.g. N=3 -> [1, 2] (one tile on
+    /// top, two below), N=4 -> [2, 2], N=5 -> [2, 3], N=12 -> [4, 4, 4].</summary>
+    private static List<int> ComputeRowCounts(int n)
+    {
+        if (n <= 0)
+        {
+            return new List<int>();
+        }
+        var cols = (int)Math.Ceiling(Math.Sqrt(n));
+        var fullRows = n / cols;
+        var leftover = n % cols;
+
+        var rows = new List<int>();
+        if (leftover > 0)
+        {
+            rows.Add(leftover);
+        }
+        for (var i = 0; i < fullRows; i++)
+        {
+            rows.Add(cols);
+        }
+        return rows;
+    }
+
+    private static string GateBadgeTextClass(GateKind kind) =>
+        kind == GateKind.Entry ? "text-[#1a5fb4]" : "text-[#7a4fb4]";
+
+    private static string GateBadgeDotClass(GateKind kind) =>
+        kind == GateKind.Entry ? "bg-[#1a5fb4]" : "bg-[#7a4fb4]";
+
+    private static string AdmissionBadgeClass(AdmissionStatus status) => status switch
+    {
+        AdmissionStatus.Approved => "text-[#2c7a2c]",
+        AdmissionStatus.Denied => "text-[#c23b1f]",
+        _ => "text-[#b0700a]",
+    };
+
+    private static string PlateColorBadgeClass(PlateColorCategory category) => category switch
+    {
+        PlateColorCategory.ElectricPrivateGreen or PlateColorCategory.ElectricCommercialGreen => "bg-[#dff2df] text-[#2c7a2c]",
+        PlateColorCategory.CommercialYellow => "bg-[#fdf1d8] text-[#8a6d1a]",
+        PlateColorCategory.PrivateWhite => "bg-[#f0f0f0] text-[#444] border border-[#ccc]",
+        PlateColorCategory.CommercialSelfDriveBlack => "bg-[#222] text-[#fdf1d8]",
+        PlateColorCategory.TemporaryRed => "bg-[#fbe1db] text-[#c23b1f]",
+        PlateColorCategory.DiplomaticBlue => "bg-[#dbe9fb] text-[#1a4fb4]",
+        _ => "bg-[#eee] text-[#777]",
+    };
+
+    private static string ToDataUrl(byte[] jpegBytes) =>
+        $"data:image/jpeg;base64,{Convert.ToBase64String(jpegBytes)}";
+
+    public void Dispose()
+    {
+        foreach (var state in GateStateStore.All)
+        {
+            state.Changed -= OnChanged;
+        }
+        EventLogStore.Changed -= OnChanged;
+        _revertTimer?.Dispose();
+    }
+}

@@ -1,0 +1,39 @@
+@inherits LayoutComponentBase
+@using UvssService.Licensing
+@inject LicenseStore LicenseStore
+@inject NavigationManager Nav
+
+<div class="h-screen w-full flex flex-col bg-[#fafafa] overflow-hidden">
+    <AppHeader />
+    <div class="flex-1 min-h-0 overflow-y-auto">
+        @if (LicenseStore.IsValid || IsLicensePage)
+        {
+            @Body
+        }
+        else
+        {
+            <div class="h-full flex items-center justify-center p-4">
+                <div class="bg-white border border-[#c23b1f] rounded max-w-md w-full p-6 flex flex-col gap-3 text-center">
+                    <h2 class="text-sm font-bold tracking-wide text-[#c23b1f]">LICENSE REQUIRED</h2>
+                    <p class="text-sm text-[#555]">@LicenseStore.Status.Message</p>
+                    <p class="text-xs text-[#777]">Go to the License page, copy this device's Device ID, and send it to your vendor to get a license key.</p>
+                    <a href="/license" class="mx-auto bg-[#1a5fb4] text-white px-4 py-2 rounded text-sm font-semibold no-underline">Go to License Page</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code {
+    // Re-evaluated on every request/navigation (this layout has no render
+    // mode of its own -- it just reflects whatever LicenseStore currently
+    // holds at render time). Saving a new key on /license takes effect the
+    // next time the user navigates anywhere, no restart needed.
+    private bool IsLicensePage => new Uri(Nav.Uri).AbsolutePath.Equals("/license", StringComparison.OrdinalIgnoreCase);
+}
